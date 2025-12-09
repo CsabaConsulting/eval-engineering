@@ -1,3 +1,5 @@
+import os
+
 from galileo import galileo_context
 from galileo import GalileoScorers
 from galileo.config import GalileoPythonConfig
@@ -9,20 +11,29 @@ from dotenv import load_dotenv
 # Load environment variables from the .env file
 load_dotenv()
 
+# Access a variable with a default value
+project_name = os.getenv("GALILEO_PROJECT", "EvalsCourse")
+print(f"project_name: {project_name}")
+log_stream_name = os.getenv("GALILEO_LOG_STREAM", "HRChatbot")
+print(f"log_stream_name: {log_stream_name}")
+
 # Set the project and Log stream, these are created if they don't exist.
 # You can also set these using the GALILEO_PROJECT and GALILEO_LOG_STREAM
 # environment variables.
-galileo_context.init(project="EvalsCourse", log_stream="HRChatbot")
+galileo_context.init(project=project_name, log_stream=log_stream_name)
 
 # Enable context adherence for the project
 enable_metrics(
-    project_name="EvalsCourse",
-    log_stream_name="HRChatbot",
+    project_name=project_name,
+    log_stream_name=log_stream_name,
     metrics=[GalileoScorers.context_adherence],
 )
 
 # Initialize the Galileo OpenAI client wrapper
-client = openai.OpenAI()
+client = openai.OpenAI(
+    base_url="http://localhost:11434/v1",
+    api_key="your_dummy_api_key" # Ollama doesn't require a real key
+)
 
 # Define a system prompt with guidance
 system_prompt = """
@@ -47,7 +58,7 @@ When answering this question, use the following context:
 
 # Send a request to the LLM
 response = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gpt-oss:20b",  # "gpt-4o-mini",
     messages=[
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},

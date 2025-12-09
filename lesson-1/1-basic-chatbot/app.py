@@ -5,7 +5,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize the Galileo OpenAI client wrapper
-client = openai.OpenAI()
+client = openai.OpenAI(
+    base_url="http://localhost:11434/v1",
+    api_key="your_dummy_api_key" # Ollama doesn't require a real key
+)
 
 # Define a system prompt with guidance
 system_prompt = """
@@ -24,7 +27,7 @@ I am in the UK. How many vacation days do I have this year?
 
 # Send a request to the LLM
 response = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gpt-oss:20b",  # "gpt-4o-mini",
     messages=[
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt}
