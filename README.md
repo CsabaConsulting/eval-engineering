@@ -21,7 +21,7 @@ You can sign up for the remaining lessons for the first cohort from these links:
 
 To use these sample apps, you will need:
 
-- Python 3.9 or greater installed
+- Python 3.10 or greater installed
 - A [Galileo account](https://galileo.ai/sign-up). The free account is fine.
 - An [OpenAI API key](https://platform.openai.com/api-keys).
 
