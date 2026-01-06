@@ -2,6 +2,7 @@
 Chainlit app entry point.
 """
 
+import os
 from datetime import datetime
 from typing import Any
 import chainlit as cl
@@ -22,7 +23,16 @@ load_dotenv(override=True)
 # Build the agent graph
 supervisor_agent = create_running_research_agent()
 
-galileo_context.init(project="EvalsCourse", log_stream="runzi")
+# Access Galileo config from environment variables with defaults
+project_name = os.getenv("GALILEO_PROJECT", "EvalsCourse")
+print(f"project_name: {project_name}")
+log_stream_name = os.getenv("GALILEO_LOG_STREAM", "runzi")
+print(f"log_stream_name: {log_stream_name}")
+
+# Set the project and Log stream, these are created if they don't exist.
+# You can also set these using the GALILEO_PROJECT and GALILEO_LOG_STREAM
+# environment variables.
+galileo_context.init(project=project_name, log_stream=log_stream_name)
 
 def create_galileo_session():
     """
