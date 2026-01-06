@@ -1,4 +1,5 @@
 import json
+import os
 
 from datetime import datetime
 from typing import Any
@@ -22,12 +23,18 @@ dataset_logstreams = {}
 # Load the environment variables
 load_dotenv(override=True)
 
+# Access Galileo config from environment variables with defaults
+project_name = os.getenv("GALILEO_PROJECT", "EvalsCourse")
+print(f"project_name: {project_name}")
+log_stream_name = os.getenv("GALILEO_LOG_STREAM", "runzi")
+print(f"log_stream_name: {log_stream_name}")
+
 # Process each dataset
 for dataset_name in DATASET_NAMEs:
     print(f"Starting processing for dataset: {dataset_name}")
 
     # Initialize Galileo with the current project, and a new log stream for each dataset
-    galileo_context.init(project="EvalsCourse", log_stream=f"runzi-{dataset_name}")
+    galileo_context.init(project=project_name, log_stream=f"{log_stream_name}-{dataset_name}")
 
     # Get the Log stream name from the Galileo config for this dataset
     config = GalileoPythonConfig.get()
