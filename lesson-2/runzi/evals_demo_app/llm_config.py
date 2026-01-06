@@ -2,10 +2,20 @@
 LLM configuration module for switching between Ollama and OpenAI.
 
 If OPENAI_API_KEY contains "_dummy_", uses Ollama; otherwise uses OpenAI.
+
+Environment variables (can be set in .env file):
+- OPENAI_API_KEY: If contains "_dummy_", uses Ollama; otherwise uses OpenAI
+- OLLAMA_MODEL: Model to use with Ollama (default: gpt-oss:20b)
+- OLLAMA_BASE_URL: Ollama server URL (default: http://localhost:11434/v1)
+- OPENAI_MODEL: Model to use with OpenAI (default: gpt-4o-mini)
 """
 
 import os
+from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+
+# Load environment variables from .env file
+load_dotenv(override=True)
 
 
 def get_api_key() -> str:
