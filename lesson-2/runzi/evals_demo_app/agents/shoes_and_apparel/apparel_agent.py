@@ -1,27 +1,16 @@
-import os
-
 from langchain.agents import create_agent
 from langchain.tools import tool
-from langchain_openai import ChatOpenAI
 
+from evals_demo_app.llm_config import create_chat_model
 from evals_demo_app.tools.apparel_finder import (
     recommend_apparel,
     get_apparel_images,
 )
 
-# Ollama configuration
-OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
-
 apparel_agent = create_agent(
     tools=[recommend_apparel, get_apparel_images],
     name="agent",
-    model=ChatOpenAI(
-        model=OLLAMA_MODEL,
-        base_url=OLLAMA_BASE_URL,
-        api_key="ollama",  # Ollama doesn't require a real key
-        name="apparel-finder-agent"
-    ),
+    model=create_chat_model("apparel-finder-agent"),
     system_prompt="""
     You are a helpful apparel recommendation agent. You assist users in finding clothing based on their preferences such as category, brand, intended use, size, and price. You can also provide image URLs for the recommended clothing.
 

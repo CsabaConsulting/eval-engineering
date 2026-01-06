@@ -1,14 +1,25 @@
+import os
 from galileo.openai import openai
 from dotenv import load_dotenv
 
 # Load environment variables from the .env file
 load_dotenv()
 
-# Initialize the Galileo OpenAI client wrapper
-client = openai.OpenAI(
-    base_url="http://localhost:11434/v1",
-    api_key="your_dummy_api_key" # Ollama doesn't require a real key
-)
+# Check if using Ollama (dummy key) or OpenAI (real key)
+api_key = os.getenv("OPENAI_API_KEY", "")
+use_ollama = "_dummy_" in api_key
+
+if use_ollama:
+    # Ollama configuration
+    base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    model = os.getenv("OLLAMA_MODEL", "gpt-oss:20b")
+    client = openai.OpenAI(base_url=base_url, api_key=api_key)
+    print(f"Using Ollama at {base_url} with model {model}")
+else:
+    # OpenAI configuration
+    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    client = openai.OpenAI()
+    print(f"Using OpenAI with model {model}")
 
 # Define a system prompt with guidance
 system_prompt = """
@@ -27,7 +38,7 @@ I am in the UK. How many vacation days do I have this year?
 
 # Send a request to the LLM
 response = client.chat.completions.create(
-    model="gpt-oss:20b",  # "gpt-4o-mini",
+    model=model,
     messages=[
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt}

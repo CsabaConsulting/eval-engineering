@@ -1,21 +1,11 @@
-import os
-
 from langchain.agents import create_agent
 from langchain.tools import tool
-from langchain_openai import ChatOpenAI
 
-# Ollama configuration
-OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
+from evals_demo_app.llm_config import create_chat_model
 
 create_training_agent = create_agent(
     name="agent",
-    model=ChatOpenAI(
-        model=OLLAMA_MODEL,
-        base_url=OLLAMA_BASE_URL,
-        api_key="ollama",  # Ollama doesn't require a real key
-        name="training-assistant-agent"
-    ),
+    model=create_chat_model("training-assistant-agent"),
     system_prompt="""
     You are a helpful runner training assistant agent. You assist users in building training plans and advice
     based on their running needs. 

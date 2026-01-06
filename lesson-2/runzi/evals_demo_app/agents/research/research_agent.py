@@ -1,7 +1,4 @@
-import os
-
 from langchain.agents import create_agent
-from langchain_openai import ChatOpenAI
 
 from evals_demo_app.agents.health.nutrition_agent import get_nutrition_information
 from evals_demo_app.agents.health.recovery_agent import get_recovery_information
@@ -12,10 +9,7 @@ from evals_demo_app.agents.shoes_and_apparel.apparel_agent import (
 from evals_demo_app.agents.shoes_and_apparel.brand_agent import get_brand_information
 from evals_demo_app.agents.shoes_and_apparel.shoe_agent import get_shoe_information
 from evals_demo_app.agents.training.training_agent import get_training_advice
-
-# Ollama configuration
-OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
+from evals_demo_app.llm_config import create_chat_model
 
 
 def create_running_research_agent():
@@ -32,12 +26,7 @@ def create_running_research_agent():
             get_shoe_information,
             get_training_advice,
         ],
-        model=ChatOpenAI(
-            model=OLLAMA_MODEL,
-            base_url=OLLAMA_BASE_URL,
-            api_key="ollama",  # Ollama doesn't require a real key
-            name="running-research-agent"
-        ),
+        model=create_chat_model("running-research-agent"),
         name="agent",
         system_prompt="""
         You are a research agent that can research information related to running. This includes:
