@@ -13,6 +13,10 @@ from evals_demo_app.agents.shoes_and_apparel.brand_agent import get_brand_inform
 from evals_demo_app.agents.shoes_and_apparel.shoe_agent import get_shoe_information
 from evals_demo_app.agents.training.training_agent import get_training_advice
 
+# Ollama configuration
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
+
 
 def create_running_research_agent():
     """
@@ -29,7 +33,10 @@ def create_running_research_agent():
             get_training_advice,
         ],
         model=ChatOpenAI(
-            model=os.environ.get("OPENAI_MODEL", "gpt-4.1"), name="running-research-agent"
+            model=OLLAMA_MODEL,
+            base_url=OLLAMA_BASE_URL,
+            api_key="ollama",  # Ollama doesn't require a real key
+            name="running-research-agent"
         ),
         name="agent",
         system_prompt="""

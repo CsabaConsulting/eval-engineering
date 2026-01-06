@@ -9,12 +9,18 @@ from evals_demo_app.tools.shoe_finder import (
     get_shoe_images,
 )
 
+# Ollama configuration
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
 
 shoe_agent = create_agent(
     tools=[recommend_shoes, get_shoe_images],
     name="agent",
     model=ChatOpenAI(
-        model=os.environ.get("OPENAI_MODEL", "gpt-4.1"), name="shoe-finder-agent"
+        model=OLLAMA_MODEL,
+        base_url=OLLAMA_BASE_URL,
+        api_key="ollama",  # Ollama doesn't require a real key
+        name="shoe-finder-agent"
     ),
     system_prompt="""
     You are a helpful shoe recommendation agent. You assist users in finding shoes based on their preferences such as category, brand, intended use, width, and price. You can also provide image URLs for the recommended shoes.

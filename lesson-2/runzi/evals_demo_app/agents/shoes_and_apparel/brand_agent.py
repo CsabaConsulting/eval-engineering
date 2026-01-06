@@ -9,12 +9,18 @@ from evals_demo_app.tools.brand_info import (
     get_brand_images,
 )
 
+# Ollama configuration
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
 
 brand_agent = create_agent(
     tools=[get_brand_info, get_brand_images],
     name="agent",
     model=ChatOpenAI(
-        model=os.environ.get("OPENAI_MODEL", "gpt-4.1"), name="brand-information-agent"
+        model=OLLAMA_MODEL,
+        base_url=OLLAMA_BASE_URL,
+        api_key="ollama",  # Ollama doesn't require a real key
+        name="brand-information-agent"
     ),
     system_prompt="""
     You are a helpful brand information agent. You can provide users with information about shoe and clothing

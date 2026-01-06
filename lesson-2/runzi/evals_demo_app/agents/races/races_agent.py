@@ -6,12 +6,18 @@ from langchain_openai import ChatOpenAI
 
 from evals_demo_app.tools.race_finder import find_races
 
+# Ollama configuration
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
 
 races_agent = create_agent(
     name="agent",
     tools=[find_races],
     model=ChatOpenAI(
-        model=os.environ.get("OPENAI_MODEL", "gpt-4.1"), name="races-agent"
+        model=OLLAMA_MODEL,
+        base_url=OLLAMA_BASE_URL,
+        api_key="ollama",  # Ollama doesn't require a real key
+        name="races-agent"
     ),
     system_prompt="""
     You are a helpful race finder agent. Use the tools available to you to provide users with details
