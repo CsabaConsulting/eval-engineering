@@ -17,6 +17,9 @@ from langchain_core.messages import HumanMessage, AIMessage
 
 from evals_demo_app.agents.research.research_agent import create_running_research_agent
 
+from engineio.payload import Payload
+Payload.max_decode_packets = 500  # Increase the limit to a suitable number
+
 # Load the environment variables
 load_dotenv(override=True)
 
