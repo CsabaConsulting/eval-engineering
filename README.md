@@ -46,3 +46,4 @@ This repo contains Python code for the course, broken down by lesson and section
 | 1      | Fixed chatbot      | [Code](./lesson-1/3-fixed-chatbot/) |
 | 2      | Runzi              | [Code](./lesson-2/runzi/) |
 | 3      | Runzi              | [Datasets, prompts, and scripts](./lesson-3/) |
+| 4      | Runzi              | [Datasets, prompts, and scripts](./lesson-4/) |
